@@ -1,0 +1,35 @@
+{
+  "lib/battlechain-contracts": {
+    "rev": "7c3f3b886a3b07f065e4b3065ccf1d3f586c42f3"
+  },
+  "lib/createx": {
+    "tag": {
+      "name": "v1.0.0",
+      "rev": "cbac803268835138f86a69bfe01fcf05a50e0447"
+    }
+  },
+  "lib/forge-std": {
+    "tag": {
+      "name": "v1.12.0",
+      "rev": "7117c90c8cf6c68e5acce4f09a6b24715cea4de6"
+    }
+  },
+  "lib/openzeppelin-contracts": {
+    "tag": {
+      "name": "v5.5.0",
+      "rev": "fcbae5394ae8ad52d8e580a3477db99814b9d565"
+    }
+  },
+  "lib/openzeppelin-contracts-upgradeable": {
+    "tag": {
+      "name": "v5.5.0",
+      "rev": "aa677e9d28ed78fc427ec47ba2baef2030c58e7c"
+    }
+  },
+  "lib/solady": {
+    "tag": {
+      "name": "v0.1.26",
+      "rev": "acd959aa4bd04720d640bf4e6a5c71037510cc4b"
+    }
+  }
+}

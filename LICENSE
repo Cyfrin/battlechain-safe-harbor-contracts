@@ -1,0 +1,14 @@
+# Licensing Information
+
+This repository contains multiple subdirectories with different licensing terms. Please refer to the LICENSE files in each subdirectory for specific licensing information.
+
+## Directory Licensing
+
+- `src/` is dual-licensed under [MIT](LICENSE-MIT) and [Apache 2.0](LICENSE-APACHE), except `src/CreateX.sol`, which is licensed AGPL-3.0-only (modified from [pcaversaccio/createx](https://github.com/pcaversaccio/createx)). `test/mock/MockCreateX.sol` is likewise AGPL-3.0-only.
+- `documents/seal-safe-harbor/` is licensed under [CC BY-ND 4.0](https://creativecommons.org/licenses/by-nd/4.0/).
+- `documents/seal-agreement-modified.md` is a modification of the SEAL Whitehat Safe Harbor Agreement, created with explicit permission from the Security Alliance (SEAL) to modify their original work, and retains their original copyright and licensing terms.
+- `documents/OLD-battlechain-safe-harbor.md` is an original work, dual-licensed under [MIT](LICENSE-MIT) and [Apache 2.0](LICENSE-APACHE).
+
+## SEAL Permission Notice
+
+The Security Alliance (SEAL) has granted explicit permission to modify their Whitehat Safe Harbor Agreement for use in this repository. The modified version (`documents/seal-agreement-modified.md`) adds support for Declared Attack Periods (voluntary opt-in security testing) and flexible URI schemes, while maintaining the original Urgent Blackhat Exploit coverage.
