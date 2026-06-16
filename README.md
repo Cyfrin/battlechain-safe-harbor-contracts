@@ -4,8 +4,6 @@ This repository contains the Safe Harbor and Attack Registry contracts for Battl
 
 This project is inspired by the [SEAL Safe Harbor project](https://github.com/security-alliance/safe-harbor). All contracts and legal documents are brand new and different from the SEAL Safe Harbor project.
 
-BattleChain is a pre-mainnet, post-testnet environment with real funds (incentivized testnet). The chain encourages ethical hackers, AI bots, and experimental DeFi advocates to stress test protocols pre-initial contract launch with real liquidity.
-
 # Table of Contents
 - [BattleChain Safe Harbor](#battlechain-safe-harbor)
 - [Table of Contents](#table-of-contents)
@@ -55,7 +53,7 @@ When a protocol launches a contract, it can submit to the L2 DAO to become a "ha
 
 All contracts with the "Attackable" flag are covered by a [safe harbor agreement](https://frameworks.securityalliance.org/safe-harbor/overview), which gives ethical hackers the confidence to attack them. The entire contract is considered under attack during this stage.
 
-- Ethical hackers send money hacked to the safe harbor, with a 10% bounty or $5M cap, whichever is lower
+- Ethical hackers send recovered funds to the safe harbor and receive a bounty per the agreement's terms (percentage and USD caps are set per-agreement, not system-wide)
 - A project can choose to "promote" a contract from "Attackable" to "Production" by calling the `promote` function on the AttackRegistry contract
 
 ## Contract States
@@ -114,7 +112,9 @@ Agreements go through the following states (defined in `IAttackRegistry.Contract
 - `PROMOTION_WINDOW`: 14 days - auto-promotes to PRODUCTION if DAO doesn't act
 - `PROMOTION_DELAY`: 3 days - delay between requesting promotion and becoming production
 - `MIN_COMMITMENT`: 7 days - minimum commitment window required for safe harbor agreements
-- `MAX_BATTLECHAIN_SCOPE`: 200 - maximum contracts in an agreement's BattleChain scope
+
+**Other limits:**
+- An agreement's BattleChain scope is capped at 200 addresses (enforced in `Agreement.sol`; not a named constant)
 
 ## Architecture
 
@@ -162,7 +162,7 @@ The central registry that:
 
 Per-protocol contract containing:
 - **Protocol name** and contact details
-- **Bounty terms**: percentage (up to 100%), individual cap, aggregate cap, identity requirements
+- **Bounty terms**: percentage (0-100), individual USD cap, optional aggregate USD cap, `retainable` flag, identity requirements, and diligence requirements
 - **Chain scopes**: CAIP-2 chain IDs with account addresses and asset recovery addresses
 - **Commitment window**: Terms cannot be changed unfavorably during this period
 - **BattleChain scope cache**: Native addresses for efficient AttackRegistry integration
@@ -510,7 +510,6 @@ See [known-issues.md](./known-issues.md) for documented design decisions, accept
 
 - **Recovery Arbiter contract and factory (WIP)**: A contract that can govern the payouts of recovered funds, so that whitehats don't have to trust protocols to honor their agreements. This is currently blocked by having Chainlink price feeds. In order to make sure the caps and floors are respected, the value of the recovered assets must be known at the time of payout.
 - **Oracle based bounty enforcement**: Currently, the bounty amounts are not enforced on-chain. We can use oracles to fetch the value of recovered assets at the time of payout to ensure compliance with the agreement terms.
-- ~~**Payment for bounties**~~: Implemented via the BondManager system — fees and bonds are collected on attack requests.
 - **DAO Governance**: DAOs suck, so we plan to have a DAC (decentralized autonomous corporation) where different roles are voted for (specifically, contract promoters and registry mods). This is a longer term goal.
 - `createDefaultAgreement` or `deployAndAdopt`: A way to quickly do everything at once might be nice? Like a one-stop function to deploy an agreement, adopt it, and request under attack... But EIP-7702 might be enough...?
 

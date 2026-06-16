@@ -13,7 +13,7 @@
 - **Bond getters** — `getBondToken`, `getTreasury`, `getFeeAmount`, `getVerifiedBondAmount`, `getUnverifiedBondAmount`, `getBondDeposit`, `getReservedByToken`.
 - **`BondForfeited` event** — Emitted when a re-registration overwrites an unclaimed bond deposit.
 - **`BondManager__BondNotYetClaimable` error** — Distinct from `NoBondDeposit` for better UX.
-- **`Agreement.MAX_BATTLECHAIN_SCOPE` (200)** — Cap on BattleChain scope addresses to prevent gas DoS on `rejectAttackRequest` and `_clearBattleChainScope`.
+- **BattleChain scope cap (200)** — Cap on BattleChain scope addresses (enforced as a literal in `Agreement._addToBattleChainScope`) to prevent gas DoS on `rejectAttackRequest` and `_clearBattleChainScope`.
 - **`renounceOwnership` disabled** on AttackRegistry, BattleChainSafeHarborRegistry, and AgreementFactory via custom revert errors.
 - **`known-issues.md`** — Documents all accepted design decisions and known risks.
 - **`.env.example`** — Template for deployment environment variables.
@@ -33,7 +33,7 @@
 - **`AttackRegistry.authorizeAgreementOwner`** — Now rejects `address(0)` as `newOwner`.
 - **`AttackRegistry.transferAttackModerator`** — Now reverts in terminal states (PRODUCTION, CORRUPTED).
 - **`Agreement._isBattleChainId`** — Cached BattleChain CAIP-2 hash as `immutable bytes32` for gas savings.
-- **`Agreement._addToBattleChainScope`** — Rejects `address(0)` and enforces `MAX_BATTLECHAIN_SCOPE`.
+- **`Agreement._addToBattleChainScope`** — Rejects `address(0)` and enforces the 200-address BattleChain scope cap.
 - **Storage gaps** — Increased to `uint256[200]` on AttackRegistry and BondManager for upgrade headroom.
 - **Event ordering** — All events now emit before their corresponding storage writes (event-before-storage pattern).
 - **CEI compliance** — `_withdrawFunds` uses `SafeTransferLib.safeTransferETH` instead of raw `call()`. All functions follow checks-effects-interactions.

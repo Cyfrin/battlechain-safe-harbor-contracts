@@ -71,7 +71,7 @@
 
 ## Agreement — Scope Integrity
 
-46. `s_battleChainScopeAddresses` length never exceeds `MAX_BATTLECHAIN_SCOPE` (200)
+46. `s_battleChainScopeAddresses` length never exceeds the BattleChain scope cap (200)
 47. Every address in `s_battleChainScopeAddresses` has `s_battleChainScopeExists[addr] == true`
 
 ## AgreementFactory — Factory Integrity
