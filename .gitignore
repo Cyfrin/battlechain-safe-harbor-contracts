@@ -7,8 +7,9 @@ out/
 /broadcast/*/31337/
 /broadcast/**/dry-run/
 
-# Docs
-docs/
+# Docs (ignored by default; deploy-considerations is intentionally tracked)
+docs/*
+!docs/deploy-considerations.md
 
 # Dotenv file
 .env
