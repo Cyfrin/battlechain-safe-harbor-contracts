@@ -5,7 +5,7 @@ import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import { SafeTransferLib } from "solady/utils/SafeTransferLib.sol";
 import { IAttackRegistry } from "src/interface/IAttackRegistry.sol";
-import { BondDeposit } from "./types/AttackRegistryTypes.sol";
+import { BondDeposit } from "src/types/AttackRegistryTypes.sol";
 
 /// @title BondManager
 /// @notice Abstract contract managing fee/bond collection for AttackRegistry.
