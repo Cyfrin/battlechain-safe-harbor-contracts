@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.34;
 
-import { AgreementDetails } from "src/types/AgreementTypes.sol";
+import { AgreementDetails } from "../types/AgreementTypes.sol";
 
 interface IAgreementFactory {
     /*//////////////////////////////////////////////////////////////

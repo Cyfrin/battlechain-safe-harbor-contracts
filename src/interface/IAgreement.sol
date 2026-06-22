@@ -8,7 +8,7 @@ import {
     Contact,
     Chain,
     Account
-} from "src/types/AgreementTypes.sol";
+} from "../types/AgreementTypes.sol";
 
 /// @title IAgreement
 /// @notice Interface for the BattleChain Safe Harbor Agreement contract
