@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.34;
+// aderyn-ignore-next-line(unspecific-solidity-pragma,push-zero-opcode)
+pragma solidity ^0.8.24;
 
 import { AgreementDetails } from "../types/AgreementTypes.sol";
 
