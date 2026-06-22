@@ -14,6 +14,7 @@ import { Agreement } from "src/Agreement.sol";
 import { AgreementFactory } from "src/AgreementFactory.sol";
 import { AttackRegistry } from "src/AttackRegistry.sol";
 import { IAttackRegistry } from "src/interface/IAttackRegistry.sol";
+import { BondDeposit } from "src/types/AttackRegistryTypes.sol";
 import { BattleChainSafeHarborRegistry } from "src/BattleChainSafeHarborRegistry.sol";
 import { HelperConfig } from "script/HelperConfig.s.sol";
 import { DeployBattleChainSafeHarbor } from "script/Deploy.s.sol";
@@ -2044,7 +2045,7 @@ contract AttackRegistryTest is Test {
         assertEq(bondToken.balanceOf(treasury), FEE_AMOUNT);
         assertEq(bondToken.balanceOf(address(attackRegistry)), VERIFIED_BOND);
 
-        IAttackRegistry.BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
+        BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
         assertEq(deposit.depositor, protocolDeployer);
         assertEq(deposit.feeAmount, FEE_AMOUNT);
         assertEq(deposit.bondAmount, VERIFIED_BOND);
@@ -2066,7 +2067,7 @@ contract AttackRegistryTest is Test {
         uint256 balanceAfter = bondToken.balanceOf(agreementOwner);
         assertEq(balanceBefore - balanceAfter, FEE_AMOUNT + UNVERIFIED_BOND);
 
-        IAttackRegistry.BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
+        BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
         assertEq(deposit.bondAmount, UNVERIFIED_BOND);
     }
 
@@ -2137,7 +2138,7 @@ contract AttackRegistryTest is Test {
         attackRegistry.requestUnderAttack(address(testAgreement));
 
         // Sanity: deposit exists with bondAmount = 0
-        IAttackRegistry.BondDeposit memory pre = attackRegistry.getBondDeposit(address(testAgreement));
+        BondDeposit memory pre = attackRegistry.getBondDeposit(address(testAgreement));
         assertEq(pre.bondAmount, 0);
         assertEq(pre.feeAmount, FEE_AMOUNT);
         assertFalse(pre.claimed);
@@ -2155,7 +2156,7 @@ contract AttackRegistryTest is Test {
         vm.prank(protocolDeployer);
         attackRegistry.claimBond(address(testAgreement));
 
-        IAttackRegistry.BondDeposit memory post = attackRegistry.getBondDeposit(address(testAgreement));
+        BondDeposit memory post = attackRegistry.getBondDeposit(address(testAgreement));
         assertTrue(post.claimed);
         // No tokens transferred — bond was zero
         assertEq(bondToken.balanceOf(protocolDeployer), balanceBefore);
@@ -2266,7 +2267,7 @@ contract AttackRegistryTest is Test {
         vm.prank(registryModerator);
         attackRegistry.rejectAttackRequest(address(testAgreement), false);
 
-        IAttackRegistry.BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
+        BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
         assertTrue(deposit.bondClaimable);
         assertFalse(deposit.slashed);
 
@@ -2295,7 +2296,7 @@ contract AttackRegistryTest is Test {
         vm.prank(registryModerator);
         attackRegistry.rejectAttackRequest(address(testAgreement), true);
 
-        IAttackRegistry.BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
+        BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
         assertTrue(deposit.slashed);
         assertFalse(deposit.bondClaimable);
 
@@ -2325,7 +2326,7 @@ contract AttackRegistryTest is Test {
         vm.prank(protocolDeployer);
         attackRegistry.markCorrupted(address(testAgreement));
 
-        IAttackRegistry.BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
+        BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
         assertTrue(deposit.bondClaimable);
 
         uint256 balanceBefore = bondToken.balanceOf(protocolDeployer);
@@ -2356,7 +2357,7 @@ contract AttackRegistryTest is Test {
         vm.prank(registryModerator);
         attackRegistry.instantPromote(address(testAgreement));
 
-        IAttackRegistry.BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
+        BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
         assertTrue(deposit.slashed);
 
         vm.prank(protocolDeployer);
@@ -2381,7 +2382,7 @@ contract AttackRegistryTest is Test {
         vm.prank(registryModerator);
         attackRegistry.instantCorrupt(address(testAgreement));
 
-        IAttackRegistry.BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
+        BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
         assertTrue(deposit.slashed);
     }
 
@@ -2410,7 +2411,7 @@ contract AttackRegistryTest is Test {
         // finalizeState materializes production and marks bond claimable
         attackRegistry.finalizeState(address(testAgreement));
 
-        IAttackRegistry.BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
+        BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
         assertTrue(deposit.bondClaimable);
 
         uint256 balanceBefore = bondToken.balanceOf(protocolDeployer);
@@ -2528,7 +2529,7 @@ contract AttackRegistryTest is Test {
         assertEq(reservedAfter, VERIFIED_BOND);
 
         // Old deposit overwritten — only the new one is claimable
-        IAttackRegistry.BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
+        BondDeposit memory deposit = attackRegistry.getBondDeposit(address(testAgreement));
         assertEq(deposit.bondAmount, VERIFIED_BOND);
         assertFalse(deposit.bondClaimable);
     }

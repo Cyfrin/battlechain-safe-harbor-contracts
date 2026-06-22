@@ -2,8 +2,6 @@
 // aderyn-ignore-next-line(unspecific-solidity-pragma,push-zero-opcode)
 pragma solidity ^0.8.23;
 
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
 /// @title IAttackRegistry
 /// @notice Interface for the BattleChain AttackRegistry contract
 interface IAttackRegistry {
@@ -40,16 +38,6 @@ interface IAttackRegistry {
         bool promoted; // Terminal flag - promoted to production
         bool corrupted; // Terminal flag - attack succeeded
         bool isRegistered; // Whether the agreement has been registered
-    }
-
-    struct BondDeposit {
-        address depositor; // Who paid (agreement owner at deposit time)
-        IERC20 token; // Token snapshot (survives token config changes)
-        uint256 feeAmount; // Fee paid (sent to treasury, recorded for audit)
-        uint256 bondAmount; // Bond held in registry
-        bool bondClaimable; // True on soft reject, markCorrupted, promote->PRODUCTION
-        bool claimed; // True after claimBond()
-        bool slashed; // True on hard reject, instantPromote, instantCorrupt
     }
 
     /*//////////////////////////////////////////////////////////////
