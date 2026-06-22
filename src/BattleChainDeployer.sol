@@ -7,6 +7,10 @@ import { IAttackRegistry } from "src/interface/IAttackRegistry.sol";
 /// @title BattleChainDeployer
 /// @notice Extends CreateX to automatically register deployments with AttackRegistry
 /// @dev All deployments through this contract will be recorded for BattleChain attack mode eligibility
+/// @dev The deploy/compute surface is mirrored in IBattleChainDeployer for downstream consumers.
+///      The contract does NOT inherit that interface: CreateX is a concrete (non-abstract) base, so
+///      dual inheritance would force override stubs on every shared function. Keep the interface in
+///      sync manually if this surface changes.
 contract BattleChainDeployer is CreateX {
     /*//////////////////////////////////////////////////////////////
                                  ERRORS
