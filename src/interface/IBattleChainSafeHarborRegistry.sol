@@ -10,10 +10,14 @@ interface IBattleChainSafeHarborRegistry {
     /// @param factory The new agreement factory address
     function setAgreementFactory(address factory) external;
 
+    /*//////////////////////////////////////////////////////////////
+                    USER STATE-CHANGING FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
     /// @notice Records the caller's adopted Safe Harbor agreement.
-    /// @dev Authoritative for Eligible Funds Rescue (Urgent Blackhat Exploit) coverage only;
-    ///      it does NOT bind which agreement governs an Eligible Stress Test Exploit — for
-    ///      attack-mode coverage the Binding Agreement is resolved via AttackRegistry.
+    /// @dev Callable by any adopter for msg.sender (not owner-gated). Authoritative for Eligible
+    ///      Funds Rescue (Urgent Blackhat Exploit) coverage only; it does NOT bind which agreement
+    ///      governs an Eligible Stress Test Exploit — for attack-mode coverage the Binding
+    ///      Agreement is resolved via AttackRegistry.
     /// @param agreementAddress The agreement to adopt for msg.sender.
     function adoptSafeHarbor(address agreementAddress) external;
 
