@@ -17,6 +17,7 @@ import { Agreement } from "src/Agreement.sol";
 import { AgreementFactory } from "src/AgreementFactory.sol";
 import { AttackRegistry } from "src/AttackRegistry.sol";
 import { IAttackRegistry } from "src/interface/IAttackRegistry.sol";
+import { BondDeposit } from "src/types/AttackRegistryTypes.sol";
 import { BattleChainSafeHarborRegistry } from "src/BattleChainSafeHarborRegistry.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
@@ -523,7 +524,7 @@ contract AttackRegistryHandler is CommonBase, StdUtils {
         uint256 idx = agreementSeed % registeredAgreements.length;
         address agreementAddr = registeredAgreements[idx];
 
-        IAttackRegistry.BondDeposit memory deposit = attackRegistry.getBondDeposit(agreementAddr);
+        BondDeposit memory deposit = attackRegistry.getBondDeposit(agreementAddr);
         if (deposit.depositor == address(0)) return;
         if (deposit.claimed || deposit.slashed) return;
 

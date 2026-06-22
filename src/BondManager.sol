@@ -5,6 +5,7 @@ import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import { SafeTransferLib } from "solady/utils/SafeTransferLib.sol";
 import { IAttackRegistry } from "src/interface/IAttackRegistry.sol";
+import { BondDeposit } from "./types/AttackRegistryTypes.sol";
 
 /// @title BondManager
 /// @notice Abstract contract managing fee/bond collection for AttackRegistry.
@@ -30,7 +31,7 @@ abstract contract BondManager {
     /// @dev Bond for requestUnderAttackForUnverifiedContracts.
     uint256 internal s_unverifiedBondAmount;
     /// @dev Per-agreement deposit records.
-    mapping(address agreement => IAttackRegistry.BondDeposit deposit) internal s_agreementBond;
+    mapping(address agreement => BondDeposit deposit) internal s_agreementBond;
     /// @dev Bonds reserved per token (pending + claimable, not slashed or claimed).
     mapping(IERC20 token => uint256 reserved) internal s_reservedByToken;
     /// @dev Storage gap for BondManager upgrades.
@@ -73,7 +74,7 @@ abstract contract BondManager {
     ///      time-based promotions that never triggered _markBondClaimable.
     /// @param agreementAddress The agreement whose bond to claim
     function claimBond(address agreementAddress) external virtual {
-        IAttackRegistry.BondDeposit storage deposit = s_agreementBond[agreementAddress];
+        BondDeposit storage deposit = s_agreementBond[agreementAddress];
 
         if (deposit.depositor == address(0)) {
             revert BondManager__NoBondDeposit(agreementAddress);
@@ -146,7 +147,7 @@ abstract contract BondManager {
         external
         view
         virtual
-        returns (IAttackRegistry.BondDeposit memory)
+        returns (BondDeposit memory)
     {
         return s_agreementBond[agreementAddress];
     }
@@ -179,14 +180,14 @@ abstract contract BondManager {
         }
 
         // Forfeit any existing unclaimed bond to keep s_reservedByToken accurate
-        IAttackRegistry.BondDeposit storage existing = s_agreementBond[agreementAddress];
+        BondDeposit storage existing = s_agreementBond[agreementAddress];
         if (existing.bondAmount > 0 && !existing.claimed && !existing.slashed) {
             emit BondForfeited(agreementAddress, existing.depositor, existing.bondAmount);
             s_reservedByToken[existing.token] -= existing.bondAmount;
         }
 
         // Effects
-        s_agreementBond[agreementAddress] = IAttackRegistry.BondDeposit({
+        s_agreementBond[agreementAddress] = BondDeposit({
             depositor: payer,
             token: s_bondToken,
             feeAmount: fee,
@@ -216,7 +217,7 @@ abstract contract BondManager {
 
     /// @notice Mark bond as claimable (normal lifecycle outcomes).
     function _markBondClaimable(address agreementAddress) internal {
-        IAttackRegistry.BondDeposit storage deposit = s_agreementBond[agreementAddress];
+        BondDeposit storage deposit = s_agreementBond[agreementAddress];
         if (deposit.bondAmount == 0) return;
         if (deposit.bondClaimable) return;
 
@@ -227,7 +228,7 @@ abstract contract BondManager {
     /// @notice Slash the bond (DAO intervention or hard reject).
     /// @dev Decrements reserved amount so slashed funds become withdrawable.
     function _slashBond(address agreementAddress) internal {
-        IAttackRegistry.BondDeposit storage deposit = s_agreementBond[agreementAddress];
+        BondDeposit storage deposit = s_agreementBond[agreementAddress];
         if (deposit.bondAmount == 0) return;
         if (deposit.slashed) return;
 
